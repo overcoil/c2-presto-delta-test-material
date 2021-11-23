@@ -1,0 +1,35 @@
+#
+# Configuration for working with a raw S3 bucket holding a Delta table
+#
+# This is useable with either Presto or Trino
+#
+# To use this:
+#   1. Rename this by removing the -tpl suffix
+#   2. Copy it to your Presto's etc/catalog. (Your new Presto catalog will be "s3-dir".)
+#   3. Fill in your AWS key pair
+#   4. Reference your Delta table (residing in S3) via the pattern: SELECT ... FROM "s3-dir"."$PATH$"."s3://bucket/path/to/delta"
+#
+
+connector.name=delta
+hive.metastore=file
+hive.metastore.catalog.dir=/tmp/presto/metastore
+
+# Using Delta table in s3
+#  for Trino: refer to presto-hive/src/main/java/io/prestosql/plugin/hive/s3/HiveS3Config.java
+#  for Presto: refer to presto-hive/src/main/java/com/facebook/presto/hive/s3/HiveS3Config.java
+
+hive.s3.aws-access-key=YOUR-KEY-HERE
+hive.s3.aws-secret-key=YOUR-SECRET-KEY-HERE
+
+# Only Trino supports requester pays
+#hive.s3.requester-pays.enabled=true
+
+# Delta connector settings; see presto-delta/src/main/java/io/prestosql/delta/DeltaConfig.java
+# These are only applicable for use with the dynamic partition pruning feature
+#delta.partition-pruning-enabled=true
+#delta.filter-pushdown-enabled=true
+#delta.projection-pushdown-enabled=true
+#delta.max-splits-batch-size=
+
+# Fail-fast in development
+#hive.metastore.thrift.client.max-retry-time=1s
