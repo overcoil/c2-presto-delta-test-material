@@ -1,0 +1,27 @@
+WITH 
+	call_center AS (SELECT * FROM deltas3."$path$"."ZZ/call_center" ),
+	catalog_page AS (SELECT * FROM deltas3."$path$"."ZZ/catalog_page" ),
+	catalog_returns AS (SELECT * FROM deltas3."$path$"."ZZ/catalog_returns" ),
+	catalog_sales AS (SELECT * FROM deltas3."$path$"."ZZ/catalog_sales" ),
+	customer AS (SELECT * FROM deltas3."$path$"."ZZ/customer" ),
+	customer_address AS (SELECT * FROM deltas3."$path$"."ZZ/customer_address" ),
+	customer_demographics AS (SELECT * FROM deltas3."$path$"."ZZ/customer_demographics" ),
+	date_dim AS (SELECT * FROM deltas3."$path$"."ZZ/date_dim" ),
+	household_demographics AS (SELECT * FROM deltas3."$path$"."ZZ/household_demographics" ),
+	income_band AS (SELECT * FROM deltas3."$path$"."ZZ/income_band" ),
+	inventory AS (SELECT * FROM deltas3."$path$"."ZZ/inventory" ),
+	item AS (SELECT * FROM deltas3."$path$"."ZZ/item" ),
+	promotion AS (SELECT * FROM deltas3."$path$"."ZZ/promotion" ),
+	reason AS (SELECT * FROM deltas3."$path$"."ZZ/reason" ),
+	ship_mode AS (SELECT * FROM deltas3."$path$"."ZZ/ship_mode" ),
+	store AS (SELECT * FROM deltas3."$path$"."ZZ/store" ),
+	store_returns AS (SELECT * FROM deltas3."$path$"."ZZ/store_returns" ),
+	store_sales AS (SELECT * FROM deltas3."$path$"."ZZ/store_sales" ),
+	time_dim AS (SELECT * FROM deltas3."$path$"."ZZ/time_dim" ),
+	warehouse AS (SELECT * FROM deltas3."$path$"."ZZ/warehouse" ),
+	web_page AS (SELECT * FROM deltas3."$path$"."ZZ/web_page" ),
+	web_returns AS (SELECT * FROM deltas3."$path$"."ZZ/web_returns" ),
+	web_sales AS (SELECT * FROM deltas3."$path$"."ZZ/web_sales" ),
+	web_site AS (SELECT * FROM deltas3."$path$"."ZZ/web_site" )
+
+
