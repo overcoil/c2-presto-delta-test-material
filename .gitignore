@@ -1,4 +1,5 @@
-extract.awk
+.extract.awk
 delta-cte.sql
-
+q*.sql
+s3*
 
