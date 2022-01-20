@@ -161,16 +161,27 @@ TPC-DS queries with dpp pattern:
 [Query 20](#tpc-ds-query-20)
 
 [Query 27](#tpc-ds-query-27)
+
 [Query 29](#tpc-ds-query-29)
+
 [Query 33](#tpc-ds-query-33)
+
 [Query 37](#tpc-ds-query-37)
+
 [Query 42](#tpc-ds-query-42)
+
 [Query 45](#tpc-ds-query-45)
+
 [Query 52](#tpc-ds-query-52)
+
 [Query 54](#tpc-ds-query-54)
+
 [Query 55](#tpc-ds-query-55)
+
 [Query 60](#tpc-ds-query-60)
+
 [Query 61](#tpc-ds-query-61)
+
 [Query 98](#tpc-ds-query-98)
 
 
