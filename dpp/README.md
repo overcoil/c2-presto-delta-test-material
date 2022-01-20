@@ -10,7 +10,7 @@ The left-hand side illustrates a direct (un-optimized) execution which will proc
 
 The right-hand side illustrates dpp's optimization which generates and injects an implicit filter into the fact table.
 
-## TPC-DS table cardinalties
+## TPC-DS 
 
 
 SF | Table | Rows |
@@ -22,7 +22,7 @@ SF | Table | Rows |
 100 | item | ? |
 100 | store_sales | est. 280M
 1000 | item | ? |
-1000 | store_sales | 2.8 billion |
+1000 | store_sales | 2,879,987,999 |
 
 
 |Table| 
@@ -56,31 +56,31 @@ web_site|
 ## Table schemas
 
 ### `store_sales`
-|Column| Type| Note|
+|Column| Type| Extra|
 |:-|:-|:-|
-ss_sold_date_sk
-ss_sold_time_sk
-ss_item_sk
-ss_customer_sk
-ss_cdemo_sk
-ss_hdemo_sk
-ss_addr_sk
-ss_store_sk
-ss_promo_sk
-ss_ticket_number
-ss_quantity
-ss_wholesale_cost
-ss_list_price
-ss_sales_price
-ss_ext_discount_amt
-ss_ext_sales_price
-ss_ext_wholesale_cost
-ss_ext_list_price
-ss_ext_tax
-ss_coupon_amt
-ss_net_paid
-ss_net_paid_inc_tax
-ss_net_profit
+ ss_sold_date_sk       | integer      |       |         
+ ss_sold_time_sk       | integer      |       |         
+ ss_item_sk            | integer      |       |         
+ ss_customer_sk        | integer      |       |         
+ ss_cdemo_sk           | integer      |       |         
+ ss_hdemo_sk           | integer      |       |         
+ ss_addr_sk            | integer      |       |         
+ ss_store_sk           | integer      |       |         
+ ss_promo_sk           | integer      |       |         
+ ss_ticket_number      | bigint       |       |         
+ ss_quantity           | integer      |       |         
+ ss_wholesale_cost     | decimal(7,2) |       |         
+ ss_list_price         | decimal(7,2) |       |         
+ ss_sales_price        | decimal(7,2) |       |         
+ ss_ext_discount_amt   | decimal(7,2) |       |         
+ ss_ext_sales_price    | decimal(7,2) |       |         
+ ss_ext_wholesale_cost | decimal(7,2) |       |         
+ ss_ext_list_price     | decimal(7,2) |       |         
+ ss_ext_tax            | decimal(7,2) |       |         
+ ss_coupon_amt         | decimal(7,2) |       |         
+ ss_net_paid           | decimal(7,2) |       |         
+ ss_net_paid_inc_tax   | decimal(7,2) |       |         
+ ss_net_profit         | decimal(7,2) |       |         
 
 ### `item`
 Column      |  Type   | Extra | 
@@ -110,7 +110,7 @@ Column      |  Type   | Extra |
 
 
 
-## Sample queries
+## Notable Queries
 
 ### Connectivity test:
 
@@ -124,7 +124,7 @@ Working; scale factor 10;
 SELECT * FROM deltas3."$path$"."s3://tpc-datasets/tpcds-2.13/tpcds_sf10_delta/store_sales" LIMIT 10;
 ```
 
-Not working; scale factor 100;
+Scale factor 100: Not working; corrupted?
 ```SQL
 trino> SELECT * FROM deltas3."$path$"."s3://tpc-datasets/tpcds-2.13/tpcds_sf100_delta/store_sales" LIMIT 10;
 Query 20220119_201846_00003_wmkca failed: Error reading tail from s3://tpc-datasets/tpcds-2.13/tpcds_sf100_delta/store_sales/ss_sold_date_sk=2451478/part-01303-dd1529ec-66c4-406b-90df-1b26d563ba70.c000.snappy.parquet with length 16384
@@ -134,35 +134,64 @@ Query 20220119_201846_00003_wmkca failed: Error reading tail from s3://tpc-datas
 SELECT count(*) FROM deltas3."$path$"."s3://tpc-datasets/tpcds_1000_dat_delta/store_sales";
 ```
 
-### Prototype
-(Non-matching tables used.. using different scale factors which is (likely) invalid and (worse case) erroneous.)
+### Prototyp
+(Non-matching (scale-factor) datasets used in some queries... this is (more likely) invalid and (worse case) erroneous.)
 
-#### The Query
+#### THE QUERY
+
+
 ```SQL
 WITH
   item AS (SELECT * FROM deltas3."$path$"."s3://tpc-datasets/tpcds_1000_dat_delta/item" ),
-  store_sales AS (SELECT * FROM deltas3."$path$"."s3://tpc-datasets/tpcds-2.13/tpcds_sf10_delta/store_sales" )
+  store_sales AS (SELECT * FROM deltas3."$path$"."s3://tpc-datasets/tpcds_1000_dat_delta/store_sales" )
 SELECT * 
 FROM store_sales, item 
-WHERE ss_item_sk = i_item_sk AND i_item_sk = 1969
-LIMIT 10;
+WHERE ss_item_sk = i_item_sk AND i_item_sk = 1969;
+```
+Does not run to completion with a single 6GB RAM worker node.
+
+#### Related Queries
+
+FYI: The closest occurrence of a query that remotely resembles our target pattern.
+
+TPC-DS Query 45
+```SQL
+select top 100 ca_zip, ca_county, sum(ws_sales_price)
+ from web_sales, customer, customer_address, date_dim, item
+ where ws_bill_customer_sk = c_customer_sk
+ 	and c_current_addr_sk = ca_address_sk 
+ 	and ws_item_sk = i_item_sk 
+ 	and ( substr(ca_zip,1,5) in ('85669', '86197','88274','83405','86475', '85392', '85460', '80348', '81792')
+ 	      or 
+ 	      i_item_id in (select i_item_id
+                             from item
+                             where i_item_sk in (2, 3, 5, 7, 11, 13, 17, 19, 23, 29)
+                             )
+ 	    )
+ 	and ws_sold_date_sk = d_date_sk
+ 	and d_qoy = 1 and d_year = 1998
+ group by ca_zip, ca_county
+ order by ca_zip, ca_county
+ ;
 ```
 
-#### Basis
+#### Building Blocks
+
+`s3://tpc-datasets/tpcds_1000_dat_delta` (Full TPC-DS table set for SF 1000)
 ```SQL
 WITH
   item AS (SELECT * FROM deltas3."$path$"."s3://tpc-datasets/tpcds_1000_dat_delta/item" )
 SELECT count(*) FROM item;
 ```
 
+`s3://tpc-datasets/tpcds-2.13` (TPC-DS table `store_sales` for SF 1/10/100 )
 ```SQL
 WITH
   store_sales AS (SELECT * FROM deltas3."$path$"."s3://tpc-datasets/tpcds-2.13/tpcds_sf10_delta/store_sales" )
 SELECT count(*) FROM store_sales;
 ```
-2 879 987 999
 
-An assymmetric (differing scale factor across the two tables) query selective query of the style above:
+An assymmetric query in the style above:
 ```SQL
 trino> WITH
   item AS (SELECT * FROM deltas3."$path$"."s3://tpc-datasets/tpcds_1000_dat_delta/item" ),
@@ -195,15 +224,19 @@ Splits: 1,860 total, 1,860 done (100.00%)
 ```
 
 
-Symmetric query selective query of the style above:
+### Attic
+
+Extract table schema from Presto/Delta:
 ```SQL
-trino> WITH
-  item AS (SELECT * FROM deltas3."$path$"."s3://tpc-datasets/tpcds_1000_dat_delta/item" ),
-  store_sales AS (SELECT * FROM deltas3."$path$"."s3://tpc-datasets/tpcds_1000_dat_delta/store_sales" )
-SELECT count(*)
-FROM store_sales, item 
-WHERE ss_item_sk = i_item_sk AND i_item_sk = 1969;
+DESCRIBE deltas3."$path$"."s3://tpc-datasets/tpcds_1000_dat_delta/item";
 ```
 
-Too much for a single worker node with 6GB RAM.
+Extract table schema with [`jq`](https://stedolan.github.io/jq/download/):
+```bash
+$ jq -r '.metaData.schemaString' *00.json | sed 's/null//g' | jq -r '.'| less
+```
 
+Extract column names (type, etc):
+```bash
+$ jq -r '.metaData.schemaString' *00.json | sed 's/null//g' | jq -r '.fields[].name'
+```
