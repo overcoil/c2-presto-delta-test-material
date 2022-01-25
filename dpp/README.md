@@ -188,7 +188,7 @@ WHERE d_date_sk = 2451000
 
 This query runs across all three fork/config:
 
-| PX | Query | Planning Time | Execution Time
+PX | Query | Planning Time | Execution Time
 | :- | :- | :- |
 Trino (partition pruning ON (default)) | QUERY1 | 26.10s | 46.83s 
 Trino (partition pruning OFF) | QUERY1 | 26.97s | 2.79m
@@ -213,7 +213,7 @@ WHERE d_date_sk = 2451000
  AND i_color = 'chocolate' AND i_size = 'small'
 ;
 ```
-| PX | Query | Planning Time | Execution Time
+PX | Query | Planning Time | Execution Time
 | :- | :- | :- |
 Trino (partition pruning ON (default)) | QUERY2 | 39.18s | 44.72s
 Trino (partition pruning OFF) | QUERY2 | 39.42s | 2.85m 
@@ -248,7 +248,7 @@ WHERE d_year=1998 AND d_moy=7 AND d_dom=5
 
 But here, no dynamic partition pruning was observed (even when running with the feature defaulted to ON):
 
-| PX | Query | Planning Time | Execution Time
+ PX | Query | Planning Time | Execution Time
 | :- | :- | :- |
 Trino (partition pruning ON (default)) | QUERY4 | 26.25s | est 3h
 Trino (partition pruning OFF) | QUERY4 | 26.06s | est 3h
