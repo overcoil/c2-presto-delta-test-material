@@ -83,7 +83,7 @@ web_site|
  ss_net_profit         | decimal(7,2) |       |         
 
 ### `item`
-Column      |  Type   | Extra | 
+Column      |  Type   | COUNT DISTINCT |  Representative |
 |:-|:-|:-|
  i_item_sk        | bigint  |       |         
  i_item_id        | varchar |       |         
@@ -93,22 +93,52 @@ Column      |  Type   | Extra |
  i_current_price  | double  |       |         
  i_wholesale_cost | double  |       |         
  i_brand_id       | integer |       |         
- i_brand          | varchar |       |         
+ i_brand          | varchar |    712   |   'univbrand #7' |      
  i_class_id       | integer |       |         
  i_class          | varchar |       |         
  i_category_id    | integer |       |         
- i_category       | varchar |       |         
+ i_category       | varchar |  10     |   'Electronics' |      
  i_manufact_id    | integer |       |         
  i_manufact       | varchar |       |         
- i_size           | varchar |       |         
+ i_size           | varchar |    7   |   'small'  |      
  i_formulation    | varchar |       |         
- i_color          | varchar |       |         
+ i_color          | varchar |    92   |  'chocolate' |       
  i_units          | varchar |       |         
  i_container      | varchar |       |         
  i_manager_id     | integer |       |         
  i_product_name   | varchar |       |         
 
-
+### `date_dim`
+Column      |  Type   | COUNT DISTINCT |  Representative |
+|:-|:-|:-|
+ d_date_sk           | bigint  |    2451000   |         
+ d_date_id           | varchar |    'AAAAAAAAIDGGFCAA'   |         
+ d_date              | varchar |       |         
+ d_month_seq         | integer |       |         
+ d_week_seq          | integer |       |         
+ d_quarter_seq       | integer |       |         
+ d_year              | integer |    1998   |         
+ d_dow               | integer |     0  |         
+ d_moy               | integer |    7   |         
+ d_dom               | integer |    5   |         
+ d_qoy               | integer |    3   |         
+ d_fy_year           | integer |     1998  |         
+ d_fy_quarter_seq    | integer |       |         
+ d_fy_week_seq       | integer |       |         
+ d_day_name          | varchar |       |         
+ d_quarter_name      | varchar |       |         
+ d_holiday           | varchar |       |         
+ d_weekend           | varchar |       |         
+ d_following_holiday | varchar |       |         
+ d_first_dom         | integer |       |         
+ d_last_dom          | integer |       |         
+ d_same_day_ly       | integer |       |         
+ d_same_day_lq       | integer |       |         
+ d_current_day       | varchar |       |         
+ d_current_week      | varchar |       |         
+ d_current_month     | varchar |       |         
+ d_current_quarter   | varchar |       |         
+ d_current_year      | varchar |       |   
 
 ## Notable Queries
 
@@ -134,21 +164,115 @@ Query 20220119_201846_00003_wmkca failed: Error reading tail from s3://tpc-datas
 SELECT count(*) FROM deltas3."$path$"."s3://tpc-datasets/tpcds_1000_dat_delta/store_sales";
 ```
 
-### Prototyp
+### Prototype
 (Non-matching (scale-factor) datasets used in some queries... this is (more likely) invalid and (worse case) erroneous.)
 
 #### THE QUERY
 
+Consider: 
+```SQL
+# QUERY1 ("altquery")
+WITH
+  store_sales AS (SELECT * FROM deltas3."$path$"."s3://tpc-datasets/tpcds_1000_dat_delta/store_sales" ),
+  date_dim AS (SELECT * FROM deltas3."$path$"."s3://tpc-datasets/tpcds_1000_dat_delta/date_dim" )
+
+SELECT * FROM store_sales
+
+JOIN date_dim ON ss_sold_date_sk = d_date_sk 
+
+WHERE d_date_sk = 2451000
+;
+```
+
+`QUERY1` showcases the need for dynamic partition pruning: there is a join between a large `stores_sales` ("fact table") with a smaller `date_dim` ("dimension"). `store_sales` is partitioned on `sold_date`. The predicate `d_date_sk = 2451000` is trivially applied by Presto on `date_dim` but it needs to be (indirectly) applied to `store_sales` so as to reduce the needless scanning of the entire fact table. 
+
+This query runs across all three fork/config:
+
+| PX | Query | Planning Time | Execution Time
+| :- | :- | :- |
+Trino (partition pruning ON (default)) | QUERY1 | 26.10s | 46.83s 
+Trino (partition pruning OFF) | QUERY1 | 26.97s | 2.79m
+PrestoDB | QUERY1 | ? | ? 
+
+
+Additional predicates layered `QUERY1` pose no difficulty. (Note the additional `JOIN` of `item` below.)
 
 ```SQL
+# QUERY2 ("altquery2")
 WITH
+  store_sales AS (SELECT * FROM deltas3."$path$"."s3://tpc-datasets/tpcds_1000_dat_delta/store_sales" ),
   item AS (SELECT * FROM deltas3."$path$"."s3://tpc-datasets/tpcds_1000_dat_delta/item" ),
-  store_sales AS (SELECT * FROM deltas3."$path$"."s3://tpc-datasets/tpcds_1000_dat_delta/store_sales" )
-SELECT * 
-FROM store_sales, item 
-WHERE ss_item_sk = i_item_sk AND i_item_sk = 1969;
+  date_dim AS (SELECT * FROM deltas3."$path$"."s3://tpc-datasets/tpcds_1000_dat_delta/date_dim" )
+
+SELECT * FROM store_sales
+
+JOIN date_dim ON ss_sold_date_sk = d_date_sk 
+JOIN item ON ss_item_sk = i_item_sk
+
+WHERE d_date_sk = 2451000
+ AND i_color = 'chocolate' AND i_size = 'small'
+;
 ```
-Does not run to completion with a single 6GB RAM worker node.
+| PX | Query | Planning Time | Execution Time
+| :- | :- | :- |
+Trino (partition pruning ON (default)) | QUERY2 | 39.18s | 44.72s
+Trino (partition pruning OFF) | QUERY2 | 39.42s | 2.85m 
+PrestoDB | QUERY2 | 
+
+
+Variation `QUERY3` illustrates the current limitation. `QUERY3` is similar to `QUERY1` with one difference: `QUERY1`'s predicate `d_year=1998 AND d_moy=7 AND d_dom=5` is replaced with `d_date_sk = 2451000`. The two predicates are chosen to be equivalent:
+
+```bash
+trino> WITH 
+    ->   date_dim AS (SELECT * FROM deltas3."$path$"."s3://tpc-datasets/tpcds_1000_dat_delta/date_dim" )
+    -> SELECT d_date_sk from date_dim WHERE d_year=1998 AND d_moy=7 AND d_dom=5;
+ d_date_sk 
+-----------
+   2451000 
+(1 row)
+```
+
+```SQL
+# QUERY4 ("altquery4")
+WITH
+  store_sales AS (SELECT * FROM deltas3."$path$"."s3://tpc-datasets/tpcds_1000_dat_delta/store_sales" ),
+  date_dim AS (SELECT * FROM deltas3."$path$"."s3://tpc-datasets/tpcds_1000_dat_delta/date_dim" )
+
+SELECT * FROM store_sales
+
+JOIN date_dim ON ss_sold_date_sk = d_date_sk 
+
+WHERE d_year=1998 AND d_moy=7 AND d_dom=5
+;
+```
+
+But here, no dynamic partition pruning was observed (even when running with the feature defaulted to ON):
+
+| PX | Query | Planning Time | Execution Time
+| :- | :- | :- |
+Trino (partition pruning ON (default)) | QUERY4 | 26.25s | est 3h
+Trino (partition pruning OFF) | QUERY4 | 26.06s | est 3h
+PrestoDB | QUERY4 | 0
+
+
+```SQL
+# QUERY3 ("altquery3")
+WITH
+  store_sales AS (SELECT * FROM deltas3."$path$"."s3://tpc-datasets/tpcds_1000_dat_delta/store_sales" ),
+  item AS (SELECT * FROM deltas3."$path$"."s3://tpc-datasets/tpcds_1000_dat_delta/item" ),
+  date_dim AS (SELECT * FROM deltas3."$path$"."s3://tpc-datasets/tpcds_1000_dat_delta/date_dim" )
+
+SELECT * FROM store_sales
+
+JOIN date_dim ON ss_sold_date_sk = d_date_sk 
+
+WHERE d_year=1998 AND d_moy=7 AND d_dom=5
+ AND i_color = 'chocolate' AND i_size = 'small'
+;
+```
+
+
+
 
 #### Related Queries
 
