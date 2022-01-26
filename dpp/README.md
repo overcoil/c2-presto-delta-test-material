@@ -294,14 +294,14 @@ WHERE d_year=1998 AND d_moy=7 AND d_dom=5
 
 Version|PX | Query | nodes | SF | Planning Time | Execution Time| 
 :-|:-|:-|:-|:-|:-|:-|
-359 | Trino (partition pruning ON (default)) | QUERY4 | 1 | 1000 | 26.25s | est 3h
-359 | Trino (partition pruning ON (default)) | QUERY4-1 | 1 | 1 | 16.37s | 1.87m
-359 | Trino (partition pruning ON (default)) | QUERY4-10 | 1 | 10 | 14.76s | 2.79m
-359 | Trino (partition pruning ON (default)) | QUERY4 | 10 | 10 | 26.64s | 14.85m
-~~359~~ | ~~Trino (partition pruning OFF)~~ | ~~QUERY4~~ | ~~1~~ | ~~1000~~ | ~~26.06s~~ | ~~long~~ 
-359 | Trino (partition pruning OFF)  | QUERY4-1 | 1 | 1 | 15.51s | 1.75m
-359 | Trino (partition pruning OFF)  | QUERY4-10 | 1 | 10 | 14.66s | 2.78m 
-359 | Trino (partition pruning OFF)  | QUERY4 | 10 | 10 | 27.04s | 15.24m
+339 | Trino (partition pruning ON (default)) | QUERY4 | 1 | 1000 | 26.25s | est 3h
+339 | Trino (partition pruning ON (default)) | QUERY4-1 | 1 | 1 | 16.37s | 1.87m
+339 | Trino (partition pruning ON (default)) | QUERY4-10 | 1 | 10 | 14.76s | 2.79m
+339 | Trino (partition pruning ON (default)) | QUERY4 | 10 | 10 | 26.64s | 14.85m
+~~339~~ | ~~Trino (partition pruning OFF)~~ | ~~QUERY4~~ | ~~1~~ | ~~1000~~ | ~~26.06s~~ | ~~long~~ 
+~~339~~ | ~~Trino (partition pruning OFF)~~ | ~~QUERY4-1~~ | ~~1~~ | ~~1~~ | ~~15.51s~~ | ~~1.75m~~ 
+~~339~~ | ~~Trino (partition pruning OFF)~~ | ~~QUERY4-1~~ | ~~1~~ | ~~10~~ | ~~14.66s~~ | ~~2.78m~~ 
+~~339~~ | ~~Trino (partition pruning OFF)~~ | ~~QUERY4~~ | ~~10~~ | ~~10~~ | ~~27.04s~~ | ~~15.24m~~ 
 [3XX]() | Trino (partition pruning ON (default)) | QUERY4-1 | 1 | 1 | TODO | TODO
 3XX | Trino (partition pruning ON (default)) | QUERY4-10 | 1 | 10 | TODO | TODO
 3XX | Trino (partition pruning ON (default)) | QUERY4 | 10 | 10 | TODO | TODO
