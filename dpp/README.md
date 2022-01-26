@@ -292,7 +292,7 @@ WHERE d_year=1998 AND d_moy=7 AND d_dom=5
 ;
 ```
 
-PX | Query | nodes | SF | Planning Time | Execution Time| 
+|PX | Query | nodes | SF | Planning Time | Execution Time| 
 |:-|:-|:-|:-|
 Trino (partition pruning ON (default)) | QUERY4 | 1 | 1000 | 26.25s | est 3h
 Trino (partition pruning ON (default)) | QUERY4-1 | 1 | 1 | 16.37s | 1.87m
