@@ -279,7 +279,7 @@ WHERE d_year=1998 AND d_moy=7 AND d_dom=5
 ```
 
 ```SQL
-# QUERY4-10 ("altquery4-sf2")
+# QUERY4-10 ("altquery4-sf10")
 WITH
   store_sales_sf10 AS (SELECT * FROM deltas3."$path$"."s3://tpc-datasets/tpcds-2.13/tpcds_sf10_delta/store_sales" ),
   date_dim AS (SELECT * FROM deltas3."$path$"."s3://tpc-datasets/tpcds_1000_dat_delta/date_dim" )
@@ -298,7 +298,7 @@ Trino (partition pruning ON (default)) | QUERY4 | 1 | 1000 | 26.25s | est 3h
 Trino (partition pruning ON (default)) | QUERY4-1 | 1 | 1 | 16.37s | 1.87m
 Trino (partition pruning ON (default)) | QUERY4-10 | 1 | 10 | 14.76s | 2.79m
 Trino (partition pruning ON (default)) | QUERY4 | 10 | 10 | TODO | TODO
-Trino (partition pruning OFF) | QUERY4 | 26.06s | long
+Trino (partition pruning OFF) | QUERY4 | 1 | 1000 | 26.06s | long 
 Trino (partition pruning OFF)  | QUERY4-1 | 1 | 1 | 15.51s | 1.75m
 Trino (partition pruning OFF)  | QUERY4-10 | 1 | 10 | 14.66s | 2.78m 
 Trino (partition pruning OFF)  | QUERY4 | 10 | 10 | TODO | TODO
