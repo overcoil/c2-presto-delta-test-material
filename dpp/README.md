@@ -192,7 +192,7 @@ PX | Query | Planning Time | Execution Time|
 |:-|:-|:-|:-|
 Trino (partition pruning ON (default)) | QUERY1 | 26.10s | 46.83s 
 Trino (partition pruning OFF) | QUERY1 | 26.97s | 2.79m
-PrestoDB | QUERY1 | ? | ? 
+PrestoDB | QUERY1 | 14.55s | 1.31m 
 
 
 Additional predicates layered `QUERY1` pose no difficulty. (Note the additional `JOIN` of `item` below.)
@@ -217,7 +217,7 @@ PX | Query | Planning Time | Execution Time|
 |:-|:-|:-|:-|
 Trino (partition pruning ON (default)) | QUERY2 | 39.18s | 44.72s
 Trino (partition pruning OFF) | QUERY2 | 39.42s | 2.85m 
-PrestoDB | QUERY2 | 
+PrestoDB | QUERY2 | 21.17s | 28.74s |
 
 
 Variation `QUERY3` illustrates the current limitation. `QUERY3` is similar to `QUERY1` with one difference: `QUERY1`'s predicate `d_year=1998 AND d_moy=7 AND d_dom=5` is replaced with `d_date_sk = 2451000`. The two predicates are chosen to be equivalent:
@@ -251,8 +251,8 @@ But here, no dynamic partition pruning was observed (even when running with the 
 PX | Query | Planning Time | Execution Time|
 |:-|:-|:-|:-|
 Trino (partition pruning ON (default)) | QUERY4 | 26.25s | est 3h
-Trino (partition pruning OFF) | QUERY4 | 26.06s | est 3h
-PrestoDB | QUERY4 | 0
+Trino (partition pruning OFF) | QUERY4 | 26.06s | long
+PrestoDB | QUERY4 | 14.00s | long | 
 
 
 ```SQL
