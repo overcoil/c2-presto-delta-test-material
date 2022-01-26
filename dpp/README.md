@@ -83,7 +83,7 @@ web_site|
  ss_net_profit         | decimal(7,2) |       |         
 
 ### `item`
-Column      |  Type   | COUNT DISTINCT |  Representative |
+|Column      |  Type   | COUNT DISTINCT |  Representative |
 |:-|:-|:-|
  i_item_sk        | bigint  |       |         
  i_item_id        | varchar |       |         
@@ -109,7 +109,7 @@ Column      |  Type   | COUNT DISTINCT |  Representative |
  i_product_name   | varchar |       |         
 
 ### `date_dim`
-Column      |  Type   | COUNT DISTINCT |  Representative |
+|Column      |  Type   | COUNT DISTINCT |  Representative |
 |:-|:-|:-|
  d_date_sk           | bigint  |    2451000   |         
  d_date_id           | varchar |    'AAAAAAAAIDGGFCAA'   |         
