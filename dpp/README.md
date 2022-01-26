@@ -84,7 +84,7 @@ web_site|
 
 ### `item`
 |Column      |  Type   | COUNT DISTINCT |  Representative |
-|:-|:-|:-|
+|:-|:-|:-|:-|
  i_item_sk        | bigint  |       |         
  i_item_id        | varchar |       |         
  i_rec_start_date | varchar |       |         
@@ -109,7 +109,7 @@ web_site|
  i_product_name   | varchar |       |         
 
 ### `date_dim`
-|Column      |  Type   | COUNT DISTINCT |  Representative |
+|Column      |  Type   |  Representative |
 |:-|:-|:-|
  d_date_sk           | bigint  |    2451000   |         
  d_date_id           | varchar |    'AAAAAAAAIDGGFCAA'   |         
@@ -292,20 +292,26 @@ WHERE d_year=1998 AND d_moy=7 AND d_dom=5
 ;
 ```
 
-|PX | Query | nodes | SF | Planning Time | Execution Time| 
-|:-|:-|:-|:-|:-|:-|
-Trino (partition pruning ON (default)) | QUERY4 | 1 | 1000 | 26.25s | est 3h
-Trino (partition pruning ON (default)) | QUERY4-1 | 1 | 1 | 16.37s | 1.87m
-Trino (partition pruning ON (default)) | QUERY4-10 | 1 | 10 | 14.76s | 2.79m
-Trino (partition pruning ON (default)) | QUERY4 | 10 | 10 | 26.64 | 14.85m
-Trino (partition pruning OFF) | QUERY4 | 1 | 1000 | 26.06s | long 
-Trino (partition pruning OFF)  | QUERY4-1 | 1 | 1 | 15.51s | 1.75m
-Trino (partition pruning OFF)  | QUERY4-10 | 1 | 10 | 14.66s | 2.78m 
-Trino (partition pruning OFF)  | QUERY4 | 10 | 10 | TODO | TODO
-PrestoDB | QUERY4 | 1 | 1000 | 14.00s | long | 
-PrestoDB | QUERY4-1 | 1 | 1 | 7.72s | 6.63m
-PrestoDB | QUERY4-10 | 1 | 10 | 8.01s | 8.79m
-PrestoDB | QUERY4 | 10 | 10 | TODO | TODO
+Version|PX | Query | nodes | SF | Planning Time | Execution Time| 
+:-|:-|:-|:-|:-|:-|:-|
+359 | Trino (partition pruning ON (default)) | QUERY4 | 1 | 1000 | 26.25s | est 3h
+359 | Trino (partition pruning ON (default)) | QUERY4-1 | 1 | 1 | 16.37s | 1.87m
+359 | Trino (partition pruning ON (default)) | QUERY4-10 | 1 | 10 | 14.76s | 2.79m
+359 | Trino (partition pruning ON (default)) | QUERY4 | 10 | 10 | 26.64s | 14.85m
+~~359~~ | ~~Trino (partition pruning OFF)~~ | ~~QUERY4~~ | ~~1~~ | ~~1000~~ | ~~26.06s~~ | ~~long~~ 
+359 | Trino (partition pruning OFF)  | QUERY4-1 | 1 | 1 | 15.51s | 1.75m
+359 | Trino (partition pruning OFF)  | QUERY4-10 | 1 | 10 | 14.66s | 2.78m 
+359 | Trino (partition pruning OFF)  | QUERY4 | 10 | 10 | 27.04s | 15.24m
+[3XX]() | Trino (partition pruning ON (default)) | QUERY4-1 | 1 | 1 | TODO | TODO
+3XX | Trino (partition pruning ON (default)) | QUERY4-10 | 1 | 10 | TODO | TODO
+3XX | Trino (partition pruning ON (default)) | QUERY4 | 10 | 10 | TODO | TODO
+0.266 | PrestoDB | QUERY4 | 1 | 1000 | 14.00s | long | 
+0.266 | PrestoDB | QUERY4-1 | 1 | 1 | 7.72s | 6.63m
+0.266 | PrestoDB | QUERY4-10 | 1 | 10 | 8.01s | 8.79m
+0.266 | PrestoDB | QUERY4 | 10 | 10 | 14.70s | 18.01m
+[0.268](https://prestodb.io/docs/current/release/release-0.268.html) | PrestoDB | QUERY4-1 | 1 | 1 | TODO | TODO
+0.266 | PrestoDB | QUERY4-10 | 1 | 10 | TODO | TODO
+0.266 | PrestoDB | QUERY4 | 10 | 10 | TODO | TODO
 
 
 ```SQL
@@ -954,6 +960,24 @@ Splits: 1,860 total, 1,860 done (100.00%)
 18:45 [2.88B rows, 28.8MB] [2.56M rows/s, 26.2KB/s]
 ```
 
+### Configuration
+
+The above tests were conducted with settings as:
+
+``sh
+region=us-west-2
+
+instanceType: m4.4xlarge
+desiredCapacity: 2 or 11
+
+PX_CONFIGPROPERTIES_QUERYMAXMEMORYPERNODE: 13GB
+PX_CONFIGPROPERTIES_QUERYMAXTOTALMEMORYPERNODE: 16GB
+PX_CONFIGPROPERTIES_QUERYMAXMEMORY: 50GB
+PX_CONFIGPROPERTIES_QUERYMAXTOTALMEMORY: 60GB
+PX_CONFIGPROPERTIES_MEMORYHEAPHEADROOMPERNODE: 9GB
+PX_JVMCONFIG_COORDINATORMAXHEAPSIZE: 38G
+PX_JVMCONFIG_WORKERMAXHEAPSIZE: 38G
+``
 
 ### Attic
 
