@@ -169,6 +169,11 @@ SELECT count(*) FROM deltas3."$path$"."s3://tpc-datasets/tpcds_1000_dat_delta/st
 
 #### THE QUERY
 
+Baseline
+
+All queries are written against TPC-DS at scale factor (SF) 1000. (Note the `1000` in the URL `s3://tpc-datasets/tpcds_1000_dat_delta`.) Comparable data (and hence queries) are available at SF 1 and 10 via the alternate paths `s3://tpc-datasets/tpcds-2.13/tpcds_sf1_delta` and `s3://tpc-datasets/tpcds-2.13/tpcds_sf10_delta`. 
+
+
 Consider: 
 ```SQL
 # QUERY1 ("altquery")
@@ -195,7 +200,7 @@ Trino (partition pruning OFF) | QUERY1 | 26.97s | 2.79m
 PrestoDB | QUERY1 | 14.55s | 1.31m 
 
 
-Additional predicates layered `QUERY1` pose no difficulty. (Note the additional `JOIN` of `item` below.)
+Additional predicates layered on `QUERY1` pose no difficulty. (Note the additional `JOIN` of `item` below.)
 
 ```SQL
 # QUERY2 ("altquery2")
@@ -220,7 +225,7 @@ Trino (partition pruning OFF) | QUERY2 | 39.42s | 2.85m
 PrestoDB | QUERY2 | 21.17s | 28.74s |
 
 
-Variation `QUERY3` illustrates the current limitation. `QUERY3` is similar to `QUERY1` with one difference: `QUERY1`'s predicate `d_year=1998 AND d_moy=7 AND d_dom=5` is replaced with `d_date_sk = 2451000`. The two predicates are chosen to be equivalent:
+Variation `QUERY4` illustrates the current limitation. `QUERY4` is similar to `QUERY1` with one difference: `QUERY1`'s predicate `d_year=1998 AND d_moy=7 AND d_dom=5` is replaced with `d_date_sk = 2451000`. The two predicates are chosen to be equivalent:
 
 ```bash
 trino> WITH 
@@ -253,6 +258,54 @@ PX | Query | Planning Time | Execution Time|
 Trino (partition pruning ON (default)) | QUERY4 | 26.25s | est 3h
 Trino (partition pruning OFF) | QUERY4 | 26.06s | long
 PrestoDB | QUERY4 | 14.00s | long | 
+
+As the run-time was too long, I trialed two variations:
+1. Lower SF (10 instead of 1000)
+2. Larger cluster (10 nodes instead of the 1 node)
+
+
+```SQL
+# QUERY4-1 ("altquery4-sf1")
+WITH
+  store_sales_sf1 AS (SELECT * FROM deltas3."$path$"."s3://tpc-datasets/tpcds-2.13/tpcds_sf1_delta/store_sales" ),
+  date_dim AS (SELECT * FROM deltas3."$path$"."s3://tpc-datasets/tpcds_1000_dat_delta/date_dim" )
+
+SELECT * FROM store_sales_sf1 store_sales
+
+JOIN date_dim ON ss_sold_date_sk = d_date_sk 
+
+WHERE d_year=1998 AND d_moy=7 AND d_dom=5
+;
+```
+
+```SQL
+# QUERY4-10 ("altquery4-sf2")
+WITH
+  store_sales_sf10 AS (SELECT * FROM deltas3."$path$"."s3://tpc-datasets/tpcds-2.13/tpcds_sf10_delta/store_sales" ),
+  date_dim AS (SELECT * FROM deltas3."$path$"."s3://tpc-datasets/tpcds_1000_dat_delta/date_dim" )
+
+SELECT * FROM store_sales_sf10 store_sales
+
+JOIN date_dim ON ss_sold_date_sk = d_date_sk 
+
+WHERE d_year=1998 AND d_moy=7 AND d_dom=5
+;
+```
+
+PX | Query | nodes | SF | Planning Time | Execution Time| 
+|:-|:-|:-|:-|
+Trino (partition pruning ON (default)) | QUERY4 | 1 | 1000 | 26.25s | est 3h
+Trino (partition pruning ON (default)) | QUERY4-1 | 1 | 1 | 16.37s | 1.87m
+Trino (partition pruning ON (default)) | QUERY4-10 | 1 | 10 | 14.76s | 2.79m
+Trino (partition pruning ON (default)) | QUERY4 | 10 | 10 | TODO | TODO
+Trino (partition pruning OFF) | QUERY4 | 26.06s | long
+Trino (partition pruning OFF)  | QUERY4-1 | 1 | 1 | 15.51s | 1.75m
+Trino (partition pruning OFF)  | QUERY4-10 | 1 | 10 | 14.66s | 2.78m 
+Trino (partition pruning OFF)  | QUERY4 | 10 | 10 | TODO | TODO
+PrestoDB | QUERY4 | 1 | 1000 | 14.00s | long | 
+PrestoDB | QUERY4-1 | 1 | 1 | 7.72s | 6.63m
+PrestoDB | QUERY4-10 | 1 | 10 | 8.01s | 8.79m
+PrestoDB | QUERY4 | 10 | 10 | TODO | TODO
 
 
 ```SQL
