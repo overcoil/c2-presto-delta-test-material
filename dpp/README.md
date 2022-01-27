@@ -294,24 +294,24 @@ WHERE d_year=1998 AND d_moy=7 AND d_dom=5
 
 Version|PX | Query | nodes | SF | Planning Time | Execution Time| 
 :-|:-|:-|:-|:-|:-|:-|
-339 | Trino (partition pruning ON (default)) | QUERY4 | 1 | 1000 | 26.25s | est 3h
-339 | Trino (partition pruning ON (default)) | QUERY4-1 | 1 | 1 | 16.37s | 1.87m
-339 | Trino (partition pruning ON (default)) | QUERY4-10 | 1 | 10 | 14.76s | 2.79m
-339 | Trino (partition pruning ON (default)) | QUERY4 | 10 | 10 | 26.64s | 14.85m
-~~339~~ | ~~Trino (partition pruning OFF)~~ | ~~QUERY4~~ | ~~1~~ | ~~1000~~ | ~~26.06s~~ | ~~long~~ 
-~~339~~ | ~~Trino (partition pruning OFF)~~ | ~~QUERY4-1~~ | ~~1~~ | ~~1~~ | ~~15.51s~~ | ~~1.75m~~ 
-~~339~~ | ~~Trino (partition pruning OFF)~~ | ~~QUERY4-1~~ | ~~1~~ | ~~10~~ | ~~14.66s~~ | ~~2.78m~~ 
-~~339~~ | ~~Trino (partition pruning OFF)~~ | ~~QUERY4~~ | ~~10~~ | ~~10~~ | ~~27.04s~~ | ~~15.24m~~ 
+[359'](https://github.com/overcoil/trino/tree/vkorukanti-339-delta) | Trino (partition pruning ON (default)) | QUERY4 | 1 | 1000 | 26.25s | est 3h
+[359'](https://github.com/overcoil/trino/tree/vkorukanti-339-delta) | Trino (partition pruning ON (default)) | QUERY4-1 | 1 | 1 | 16.37s | 1.87m
+[359'](https://github.com/overcoil/trino/tree/vkorukanti-339-delta) | Trino (partition pruning ON (default)) | QUERY4-10 | 1 | 10 | 14.76s | 2.79m
+[359'](https://github.com/overcoil/trino/tree/vkorukanti-339-delta) | Trino (partition pruning ON (default)) | QUERY4 | 10 | 10 | 26.64s | 14.85m
+~~[359'](https://github.com/overcoil/trino/tree/vkorukanti-339-delta)~~ | ~~Trino (partition pruning OFF)~~ | ~~QUERY4~~ | ~~1~~ | ~~1000~~ | ~~26.06s~~ | ~~long~~ 
+~~[359'](https://github.com/overcoil/trino/tree/vkorukanti-339-delta)~~ | ~~Trino (partition pruning OFF)~~ | ~~QUERY4-1~~ | ~~1~~ | ~~1~~ | ~~15.51s~~ | ~~1.75m~~ 
+~~[359'](https://github.com/overcoil/trino/tree/vkorukanti-339-delta)~~ | ~~Trino (partition pruning OFF)~~ | ~~QUERY4-1~~ | ~~1~~ | ~~10~~ | ~~14.66s~~ | ~~2.78m~~ 
+~~[359'](https://github.com/overcoil/trino/tree/vkorukanti-339-delta)~~ | ~~Trino (partition pruning OFF)~~ | ~~QUERY4~~ | ~~10~~ | ~~10~~ | ~~27.04s~~ | ~~15.24m~~ 
 [3XX]() | Trino (partition pruning ON (default)) | QUERY4-1 | 1 | 1 | TODO | TODO
 3XX | Trino (partition pruning ON (default)) | QUERY4-10 | 1 | 10 | TODO | TODO
 3XX | Trino (partition pruning ON (default)) | QUERY4 | 10 | 10 | TODO | TODO
-0.266 | PrestoDB | QUERY4 | 1 | 1000 | 14.00s | long | 
-0.266 | PrestoDB | QUERY4-1 | 1 | 1 | 7.72s | 6.63m
-0.266 | PrestoDB | QUERY4-10 | 1 | 10 | 8.01s | 8.79m
-0.266 | PrestoDB | QUERY4 | 10 | 10 | 14.70s | 18.01m
+[0.266'](https://github.com/vkorukanti/presto/tree/delta-dsr0.3) | PrestoDB | QUERY4 | 1 | 1000 | 14.00s | long | 
+[0.266'](https://github.com/vkorukanti/presto/tree/delta-dsr0.3) | PrestoDB | QUERY4-1 | 1 | 1 | 7.72s | 6.63m
+[0.266'](https://github.com/vkorukanti/presto/tree/delta-dsr0.3) | PrestoDB | QUERY4-10 | 1 | 10 | 8.01s | 8.79m
+[0.266'](https://github.com/vkorukanti/presto/tree/delta-dsr0.3) | PrestoDB | QUERY4 | 10 | 10 | 14.70s | 18.01m
 [0.268](https://prestodb.io/docs/current/release/release-0.268.html) | PrestoDB | QUERY4-1 | 1 | 1 | TODO | TODO
-0.266 | PrestoDB | QUERY4-10 | 1 | 10 | TODO | TODO
-0.266 | PrestoDB | QUERY4 | 10 | 10 | TODO | TODO
+[0.268](https://prestodb.io/docs/current/release/release-0.268.html) | PrestoDB | QUERY4-10 | 1 | 10 | TODO | TODO
+[0.268](https://prestodb.io/docs/current/release/release-0.268.html) | PrestoDB | QUERY4 | 10 | 10 | TODO | TODO
 
 
 ```SQL
