@@ -297,7 +297,7 @@ Version|PX | Query | nodes | SF | Planning Time | Execution Time|
 [359g](https://github.com/overcoil/trino/tree/vkorukanti-339-delta) | Trino (partition pruning ON (default)) | QUERY4 | 1 | 1000 | 26.25s | est 3h
 [359g](https://github.com/overcoil/trino/tree/vkorukanti-339-delta) | Trino (partition pruning ON (default)) | QUERY4-1 | 1 | 1 | 16.37s | 1.87m
 [359g](https://github.com/overcoil/trino/tree/vkorukanti-339-delta) | Trino (partition pruning ON (default)) | QUERY4-10 | 1 | 10 | 14.76s | 2.79m
-[359g](https://github.com/overcoil/trino/tree/vkorukanti-339-delta) | Trino (partition pruning ON (default)) | QUERY4 | 10 | 10 | 26.64s | 14.85m
+[359g](https://github.com/overcoil/trino/tree/vkorukanti-339-delta) | Trino (partition pruning ON (default)) | QUERY4-10 | 10 | 10 | 26.64s | 14.85m
 ~~[359g](https://github.com/overcoil/trino/tree/vkorukanti-339-delta)~~ | ~~Trino (partition pruning OFF)~~ | ~~QUERY4~~ | ~~1~~ | ~~1000~~ | ~~26.06s~~ | ~~long~~ 
 ~~[359g](https://github.com/overcoil/trino/tree/vkorukanti-339-delta)~~ | ~~Trino (partition pruning OFF)~~ | ~~QUERY4-1~~ | ~~1~~ | ~~1~~ | ~~15.51s~~ | ~~1.75m~~ 
 ~~[359g](https://github.com/overcoil/trino/tree/vkorukanti-339-delta)~~ | ~~Trino (partition pruning OFF)~~ | ~~QUERY4-1~~ | ~~1~~ | ~~10~~ | ~~14.66s~~ | ~~2.78m~~ 
@@ -305,8 +305,8 @@ Version|PX | Query | nodes | SF | Planning Time | Execution Time|
 :-|:-|:-|:-|:-|:-|:-|
 [359'](https://github.com/vkorukanti/trino/tree/359-delta) | Trino | QUERY4-1 | 1 | 1 | TODO | TODO
 [359'](https://github.com/vkorukanti/trino/tree/359-delta) | Trino | QUERY4-10 | 1 | 10 | TODO | TODO
-[359'](https://github.com/vkorukanti/trino/tree/359-delta) | Trino | QUERY4-10 | 10 | 10 | TODO | TODO
-[359'](https://github.com/vkorukanti/trino/tree/359-delta) | Trino | QUERY4 | 10 | 1000 | TODO | TODO
+[359'](https://github.com/vkorukanti/trino/tree/359-delta) | Trino | QUERY4-10 | 10 | 10 | 15.12s | 38.19s
+[359'](https://github.com/vkorukanti/trino/tree/359-delta) | Trino | QUERY4 | 10 | 1000 | 26.45s | TODO
 :-|:-|:-|:-|:-|:-|:-|
 [0.266'](https://github.com/vkorukanti/presto/tree/delta-dsr0.3) | PrestoDB | QUERY4 | 1 | 1000 | 14.00s | long | 
 [0.266'](https://github.com/vkorukanti/presto/tree/delta-dsr0.3) | PrestoDB | QUERY4-1 | 1 | 1 | 7.72s | 6.63m
