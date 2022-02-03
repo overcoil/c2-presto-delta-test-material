@@ -324,6 +324,8 @@ copy-query-log.sh xyz  r/359x/query4-10w.json
 
 
 `m4.4xlarge` instances are needed 
+
+
 Version|PX | Query | nodes | SF | Planning Time | Execution Time| 
 :-|:-|:-|:-|:-|:-|:-|
 [359g](https://github.com/overcoil/trino/tree/vkorukanti-339-delta) | Trino | QUERY4-1 | 1 | 1 | 15.85s | 1.82m
@@ -331,7 +333,6 @@ Version|PX | Query | nodes | SF | Planning Time | Execution Time|
 [359g](https://github.com/overcoil/trino/tree/vkorukanti-339-delta) | Trino | QUERY4-1 | 10 | 1 | 14.67s | 26.86s
 [359g](https://github.com/overcoil/trino/tree/vkorukanti-339-delta) | Trino | QUERY4-10 | 10 | 10 | 14.70s | 32.01s
 [359g](https://github.com/overcoil/trino/tree/vkorukanti-339-delta) | Trino | QUERY4 | 10 | 1000 |  26.23s | 15.00m
-
 [359'](https://github.com/vkorukanti/trino/tree/359-delta) | Trino | QUERY4-1 | 1 | 1 | 15.08s | 1.91m
 [359'](https://github.com/vkorukanti/trino/tree/359-delta) | Trino | QUERY4-10 | 1 | 10 | 14.27s | 3.04m
 [359'](https://github.com/vkorukanti/trino/tree/359-delta) | Trino | QUERY4-1 | 10 | 1 | 14.37s | 25.54s
