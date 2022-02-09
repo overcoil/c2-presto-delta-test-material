@@ -339,17 +339,17 @@ Version|PX | Query | nodes | SF | Planning Time | Execution Time|
 [359'](https://github.com/vkorukanti/trino/tree/359-delta) | Trino | QUERY4-10 | 10 | 10 | 14.31s | 34.90s
 [359'](https://github.com/vkorukanti/trino/tree/359-delta) | Trino | QUERY4 | 10 | 1000 | 26.33s | 14.61m
 :-|:-|:-|:-|:-|:-|:-|
-[0.266'](https://github.com/vkorukanti/presto/tree/delta-dsr0.3) | PrestoDB | QUERY4-1 | 1 | 1 | 7.72s | 6.63m
-[0.266'](https://github.com/vkorukanti/presto/tree/delta-dsr0.3) | PrestoDB | QUERY4-10 | 1 | 10 | 8.01s | 8.79m
-[0.266'](https://github.com/vkorukanti/presto/tree/delta-dsr0.3) | PrestoDB | QUERY4-1 | 10 | 1 | |
-[0.266'](https://github.com/vkorukanti/presto/tree/delta-dsr0.3) | PrestoDB | QUERY4-10 | 10 | 10 | 8.22s | 1.10m
-[0.266'](https://github.com/vkorukanti/presto/tree/delta-dsr0.3) | PrestoDB | QUERY4 | 10 | 1000 | 14.70s | 18.01m
+[0.266'](https://github.com/vkorukanti/presto/tree/delta-dsr0.3) | PrestoDB | QUERY4-1 | 1 | 1 | 8.01s | 6.38m
+[0.266'](https://github.com/vkorukanti/presto/tree/delta-dsr0.3) | PrestoDB | QUERY4-10 | 1 | 10 | 7.72s| 7.82m
+[0.266'](https://github.com/vkorukanti/presto/tree/delta-dsr0.3) | PrestoDB | QUERY4-1 | 10 | 1 | 7.33s | 56.21s
+[0.266'](https://github.com/vkorukanti/presto/tree/delta-dsr0.3) | PrestoDB | QUERY4-10 | 10 | 10 | 7.43s | 1.02m
+[0.266'](https://github.com/vkorukanti/presto/tree/delta-dsr0.3) | PrestoDB | QUERY4 | 10 | 1000 | 13.75s | 55.68s (crash)
 :-|:-|:-|:-|:-|:-|:-|
-[0.269-SNAPSHOT](https://github.com/prestodb/presto/tree/release-0.269) | PrestoDB | QUERY4-1 | 1 | 1 | 8.05s | 6.76m
-[0.269-SNAPSHOT](https://github.com/prestodb/presto/tree/release-0.269) | PrestoDB | QUERY4-10 | 1 | 10 | 7.76s | 8.05m
-[0.269-SNAPSHOT](https://github.com/prestodb/presto/tree/release-0.269) | PrestoDB | QUERY4-1 | 10 | 1 | |
-[0.269-SNAPSHOT](https://github.com/prestodb/presto/tree/release-0.269) | PrestoDB | QUERY4-10 | 10 | 10 | 7.81s | 1.15m
-[0.269-SNAPSHOT](https://github.com/prestodb/presto/tree/release-0.269) | PrestoDB | QUERY4 | 10 | 1000 | 14.16s | 17.07m
+[0.269-SNAPSHOT](https://github.com/prestodb/presto/tree/release-0.269) | PrestoDB | QUERY4-1 | 1 | 1 | 8.23s | 5.89m
+[0.269-SNAPSHOT](https://github.com/prestodb/presto/tree/release-0.269) | PrestoDB | QUERY4-10 | 1 | 10 | 7.82s | 7.70m
+[0.269-SNAPSHOT](https://github.com/prestodb/presto/tree/release-0.269) | PrestoDB | QUERY4-1 | 10 | 1 | 7.55s | 50.70s
+[0.269-SNAPSHOT](https://github.com/prestodb/presto/tree/release-0.269) | PrestoDB | QUERY4-10 | 10 | 10 | 8.23s | 59.75sm
+[0.269-SNAPSHOT](https://github.com/prestodb/presto/tree/release-0.269) | PrestoDB | QUERY4 | 10 | 1000 | 13.42s | 40.31s (crash)
 
 
 ```SQL
