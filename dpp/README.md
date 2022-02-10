@@ -328,11 +328,11 @@ copy-query-log.sh xyz  r/359x/query4-10w.json
 
 Version|PX | Query | nodes | SF | Planning Time | Execution Time| 
 :-|:-|:-|:-|:-|:-|:-|
-[359g](https://github.com/overcoil/trino/tree/vkorukanti-339-delta) | Trino | QUERY4-1 | 1 | 1 |  |
-[359g](https://github.com/overcoil/trino/tree/vkorukanti-339-delta) | Trino | QUERY4-10 | 1 | 10 |  |
-[359g](https://github.com/overcoil/trino/tree/vkorukanti-339-delta) | Trino | QUERY4-1 | 10 | 1 |  |
-[359g](https://github.com/overcoil/trino/tree/vkorukanti-339-delta) | Trino | QUERY4-10 | 10 | 10 |  |
-[359g](https://github.com/overcoil/trino/tree/vkorukanti-339-delta) | Trino | QUERY4 | 10 | 1000 |   |
+[359g](https://github.com/overcoil/trino/tree/vkorukanti-339-delta) | Trino | QUERY4-1 | 1 | 1 | 15.99s | 34.74s
+[359g](https://github.com/overcoil/trino/tree/vkorukanti-339-delta) | Trino | QUERY4-10 | 1 | 10 | 14.65s | 49.54s
+[359g](https://github.com/overcoil/trino/tree/vkorukanti-339-delta) | Trino | QUERY4-1 | 10 | 1 | 14.93s | 19.33s
+[359g](https://github.com/overcoil/trino/tree/vkorukanti-339-delta) | Trino | QUERY4-10 | 10 | 10 | 14.57s | 24.30s
+[359g](https://github.com/overcoil/trino/tree/vkorukanti-339-delta) | Trino | QUERY4 | 10 | 1000 | 26.29s  | 6.98m
 :-|:-|:-|:-|:-|:-|:-|
 [359'](https://github.com/vkorukanti/trino/tree/359-delta) | Trino | QUERY4-1 | 1 | 1 | 15.00s | 33.96s
 [359'](https://github.com/vkorukanti/trino/tree/359-delta) | Trino | QUERY4-10 | 1 | 10 | 14.63s | 55.97s
